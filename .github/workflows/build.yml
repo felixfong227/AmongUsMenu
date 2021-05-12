@@ -28,6 +28,7 @@ jobs:
           files: |
             ./Release/AmongUsMenu.dll
             ./LICENSE
+          tag_name: "release_main"
   
   Release_Version:
     runs-on: windows-latest
@@ -48,3 +49,4 @@ jobs:
         with:
           files: |
             ./Release_Version/version.dll
+          tag_name: "release_main"
