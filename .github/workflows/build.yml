@@ -18,19 +18,14 @@ jobs:
       - name: Build
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
-      
-      - name: Upload Artifact
+
+      - name: Upload To Release
         if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
+        uses: softprops/action-gh-release@v1
         with:
-          name: Release
-          path: |
+          files: |
             ./Release/AmongUsMenu.dll
             ./LICENSE
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2.2.1
-        with:
-          files: ./Release/AmongUsMenu.dll
   
   Release_Version:
     runs-on: windows-latest
@@ -42,12 +37,10 @@ jobs:
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
       
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2.2.1
-        with:
-          files: ./Release_Version/version.dll
             
-      - name: Upload to release
+      - name: Upload To Release
+        if: ${{ github.event_name == 'push' }}
         uses: softprops/action-gh-release@v1
         with:
-          files: ./Release_Version/version.dll
+          files: |
+            ./Release_Version/version.dll
