@@ -27,6 +27,10 @@ jobs:
           path: |
             ./Release/AmongUsMenu.dll
             ./LICENSE
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          files: ./Release/AmongUsMenu.dll
   
   Release_Version:
     runs-on: windows-latest
@@ -39,61 +43,11 @@ jobs:
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
       
       - name: Upload Artifact
-        if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: Release_Version
-          path: |
-            ./Release_Version/version.dll
-            ./LICENSE
-
-  Debug:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      
-      - name: Build
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug'
-      
-      - name: Upload Artifact
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
+          files: ./Release_Version/version.dll
+            
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Debug
-          path: |
-            ./Debug/AmongUsMenu.dll
-            ./LICENSE
-  
-  Debug_Version:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      
-      - name: Build
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
-      
-      - name: Upload Artifact
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
-        with:
-          name: Debug_Version
-          path: | 
-            ./Debug_Version/version.dll
-            ./LICENSE
-  
-  Notification:
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    needs: [Release, Release_Version, Debug, Debug_Version]
-    steps:
-      - name: Discord Notification
-        uses: rjstone/discord-webhook-notify@v1.0.4
-        with:
-          severity: info
-          description: "Project Build"
-          details: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          webhookUrl: ${{ secrets.DISCORD_BUILD_WEBHOOK }}
+          files: ./Release_Version/version.dll
