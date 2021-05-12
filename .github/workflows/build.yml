@@ -22,6 +22,8 @@ jobs:
       - name: Upload To Release
         if: ${{ github.event_name == 'push' }}
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: |
             ./Release/AmongUsMenu.dll
@@ -41,6 +43,8 @@ jobs:
       - name: Upload To Release
         if: ${{ github.event_name == 'push' }}
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: |
             ./Release_Version/version.dll
